@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Panel Bibliotecario{% endblock %}
+{% block content %}
+<h1 class="fw-bold mb-4">Panel Bibliotecario</h1>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card text-center p-3">
+            <h2 class="fw-bold text-dark">{{ total_libros }}</h2>
+            <p class="text-muted mb-0">Total de libros</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-3">
+            <h2 class="fw-bold text-dark">{{ total_prestamos }}</h2>
+            <p class="text-muted mb-0">Total de préstamos</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-center p-3">
+            <h2 class="fw-bold text-warning">{{ prestamos_pendientes }}</h2>
+            <p class="text-muted mb-0">Préstamos activos</p>
+        </div>
+    </div>
+</div>
+
+<h3 class="fw-bold mb-3">Préstamos activos</h3>
+
+{% if prestamos_activos %}
+<div class="table-responsive">
+    <table class="table table-hover bg-white rounded shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Socio</th>
+                <th>Libro</th>
+                <th>Autor</th>
+                <th>Fecha préstamo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prestamo in prestamos_activos %}
+            <tr>
+                <td>{{ prestamo.id }}</td>
+                <td>{{ prestamo.socio.get_full_name|default:prestamo.socio.username }}</td>
+                <td>{{ prestamo.libro.titulo }}</td>
+                <td>{{ prestamo.libro.autor }}</td>
+                <td>{{ prestamo.fecha_prestamo }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-success">No hay préstamos activos.</div>
+{% endif %}
+{% endblock %}

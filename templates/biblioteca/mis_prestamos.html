@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Mis Préstamos{% endblock %}
+{% block content %}
+<h1 class="fw-bold mb-4">Mis Préstamos</h1>
+
+{% if prestamos %}
+<div class="table-responsive">
+    <table class="table table-hover bg-white rounded shadow-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>Libro</th>
+                <th>Autor</th>
+                <th>Fecha préstamo</th>
+                <th>Fecha devolución</th>
+                <th>Estado</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for prestamo in prestamos %}
+            <tr>
+                <td>{{ prestamo.libro.titulo }}</td>
+                <td>{{ prestamo.libro.autor }}</td>
+                <td>{{ prestamo.fecha_prestamo }}</td>
+                <td>{{ prestamo.fecha_devolucion|default:'—' }}</td>
+                <td>
+                    {% if prestamo.devuelto %}
+                    <span class="badge bg-success">Devuelto</span>
+                    {% else %}
+                    <span class="badge bg-warning text-dark">Activo</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if not prestamo.devuelto %}
+                    <a href="{% url 'devolver_libro' prestamo.pk %}" class="btn btn-sm btn-outline-dark">Devolver</a>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">No tienes préstamos registrados.</div>
+{% endif %}
+
+<a href="/" class="btn btn-dark mt-2">Ver catálogo</a>
+{% endblock %}

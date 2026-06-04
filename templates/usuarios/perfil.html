@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Mi Perfil{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body p-4">
+                <h2 class="fw-bold mb-4">Mi Perfil</h2>
+                <table class="table">
+                    <tr><th>Usuario</th><td>{{ user.username }}</td></tr>
+                    <tr><th>Nombre</th><td>{{ user.first_name }} {{ user.last_name }}</td></tr>
+                    <tr><th>Email</th><td>{{ user.email }}</td></tr>
+                    <tr><th>Teléfono</th><td>{{ user.telefono|default:'No registrado' }}</td></tr>
+                    <tr><th>Dirección</th><td>{{ user.direccion|default:'No registrada' }}</td></tr>
+                    <tr><th>Fecha de nacimiento</th><td>{{ user.fecha_nacimiento|default:'No registrada' }}</td></tr>
+                    <tr><th>Grupos</th><td>
+                        {% for grupo in user.groups.all %}
+                        <span class="badge bg-secondary">{{ grupo.name }}</span>
+                        {% empty %}
+                        Sin grupos
+                        {% endfor %}
+                    </td></tr>
+                </table>
+                <a href="{% url 'mis_prestamos' %}" class="btn btn-dark">Ver mis préstamos</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

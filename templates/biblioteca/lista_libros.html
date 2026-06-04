@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block title %}Catálogo de Libros{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="fw-bold">Catálogo de Libros</h1>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-10">
+        <form method="get" class="d-flex gap-2 flex-wrap">
+
+            <input
+                type="text"
+                name="titulo"
+                class="form-control"
+                style="max-width: 200px;"
+                placeholder="Buscar por título..."
+                value="{{ titulo_busq }}">
+
+            <!-- input nuevo — apellido del autor -->
+            <input
+                type="text"
+                name="autor"
+                class="form-control"
+                style="max-width: 200px;"
+                placeholder="Buscar por autor..."
+                value="{{ autor_busq }}">
+
+            <select name="genero" class="form-select" style="max-width: 180px;">
+                <option value="">Todos los géneros</option>
+                {% for g in generos %}
+                <option value="{{ g.id }}"
+                    {% if genero_id == g.id|stringformat:"s" %}selected{% endif %}>
+                    {{ g.nombre }}
+                </option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn btn-dark">Buscar</button>
+
+            {% if titulo_busq or autor_busq or genero_id %}
+            <a href="{% url 'lista_libros' %}" class="btn btn-outline-secondary">Limpiar</a>
+            {% endif %}
+
+        </form>
+    </div>
+</div>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for libro in libros %}
+    <div class="col">
+        <div class="card h-100">
+            <div class="card-body">
+                <h5 class="card-title fw-bold">{{ libro.titulo }}</h5>
+                <p class="text-muted mb-1">{{ libro.autor }}</p>
+                {% if libro.genero %}
+                <span class="badge bg-secondary mb-2">{{ libro.genero }}</span>
+                {% endif %}
+                <p class="card-text small text-muted">{{ libro.descripcion|truncatewords:20 }}</p>
+            </div>
+            <div class="card-footer d-flex justify-content-between align-items-center">
+                {% if libro.disponible %}
+                <span class="badge bg-success">Disponible ({{ libro.stock }})</span>
+                {% else %}
+                <span class="badge bg-danger">Sin stock</span>
+                {% endif %}
+                <a href="{% url 'detalle_libro' libro.pk %}" class="btn btn-sm btn-dark">Ver más</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="alert alert-info">No se encontraron libros.</div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
